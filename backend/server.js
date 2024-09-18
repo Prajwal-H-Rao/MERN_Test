@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const username = req.body.data.name;
     const extname = path.extname(file.originalname);
-    cb(null, `${username}-${Date.now()}${extname}`);
+    cb(null, `${username}-${file.originalname.substring(0,file.originalname.length-extname.length)}${extname}`);
   },
 });
 
@@ -72,10 +72,8 @@ app.post("/upload", (req, res) => {
       return res.status(400).send("No file uploaded.");
     }
 
-    const username = req.body;
+    const {name,email,mobile,designation,gender,course} = req.body.data;
     const imagePath = req.file.path;
-
-    console.log(username,imagePath);
 
     res.send(`File uploaded successfully: ${req.file.path}`);
   });

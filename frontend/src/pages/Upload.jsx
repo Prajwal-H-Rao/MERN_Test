@@ -20,9 +20,10 @@ const Upload = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('data', data);
-    formData.append('image', image);
+    const formData = {
+        data:data,
+        image,image
+    }
 
     try {
       const response = await axios.post('http://localhost:5000/upload', formData, {
@@ -34,7 +35,6 @@ const Upload = () => {
     } catch (error) {
       alert('Error uploading file: ' + error.response.data);
     }
-    console.log(data,image)
   };
 
   return (
