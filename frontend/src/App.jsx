@@ -1,8 +1,12 @@
 import React from 'react'
+import {Routes,Route} from 'react-router-dom'
+import Upload from './pages/Upload'
 
 const App = () => {
   return (
-    <div>App</div>
+    <Routes>
+      <Route path='/' Component={Upload}/>
+    </Routes>
   )
 }
 
