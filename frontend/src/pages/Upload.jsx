@@ -84,7 +84,7 @@ const Upload = () => {
           <option disabled>select an option</option>
           <option value="HR">HR</option>
           <option value="Manager">Manager</option>
-          <option value="sales">Sales</option>
+          <option value="Sales">Sales</option>
         </select>
       </label>
 
@@ -113,7 +113,6 @@ const Upload = () => {
           value="MCA"
           checked={data.course === "MCA"}
           onChange={(e) => setData({ ...data, course: e.target.value })}
-          required
         />{" "}
         MCA
         <input
@@ -121,7 +120,6 @@ const Upload = () => {
           value="BCA"
           checked={data.course === "BCA"}
           onChange={(e) => setData({ ...data, course: e.target.value })}
-          required
         />{" "}
         BCA
         <input
@@ -129,7 +127,6 @@ const Upload = () => {
           value="BSC"
           checked={data.course === "BSC"}
           onChange={(e) => setData({ ...data, course: e.target.value })}
-          required
         />{" "}
         BSC
       </label>

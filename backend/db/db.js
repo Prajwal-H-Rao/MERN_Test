@@ -1,7 +1,9 @@
-import mongoose from "mongoose";
+const mongoose=require("mongoose")
 
-export default async function connectToDb(){
+async function connectToDb(){
     mongoose.connect(process.env.MONGO_URI).then(()=>{
         console.log("Conneted to the database")
     }).catch(err=>console.error(err.message))
 }
+
+module.exports=connectToDb

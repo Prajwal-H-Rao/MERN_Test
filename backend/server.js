@@ -1,13 +1,13 @@
-import e from "express";
-import { config } from "dotenv";
-import cors from "cors";
+const e = require('express')
+const config = require('dotenv').config
+const cors = require('cors')
 
-import connectToDb from "./db/db.js";
-import userModel from "./models/user.js";
-import path from "path";
-import multer from "multer";
+const connectToDb = require("./db/db.js");
+const userModel = require("./models/user.js")
+const path = require("path");
+const multer = require("multer");
 
-import employeeModel from "./models/employee.js";
+const employeeModel = require("./models/employee.js")
 
 config();
 const port = process.env.PORT || 5000;
@@ -83,13 +83,13 @@ app.post("/upload", (req, res) => {
     const { name, email, mobile, designation, gender, course } = req.body.data;
     const imagePath = req.file.path;
 
-    const check_database = await employeeModel.find({
+    const check_database = await employeeModel.findOne({
       name: name,
       email: email,
     });
 
-    if (check_database.length > 0)
-      res.status(500).json({ message: "User already exists" });
+    if (check_database!=undefined)
+      return res.status(500).json({ message: "User already exists" });
 
     const upload_to_database = new employeeModel({
       image: imagePath,
@@ -103,14 +103,20 @@ app.post("/upload", (req, res) => {
 
     const saved = await upload_to_database.save();
     if (saved) {
-      res.status(200).json({ message: "uploaded sucessfully" });
+      return res.status(200).json({ message: "uploaded sucessfully" });
     }
-
-    res.send(`File uploaded successfully: ${req.file.path}`);
+    else return res.status(500).json({message:"Internal error"})
   });
 });
 
 //edit employee
+
+//get employee list
+app.get("/list",async(req,res)=>{
+  const data = await employeeModel.find();
+  if(data===undefined) res.json({data:[]})
+  else res.json({data:data});
+})
 
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);

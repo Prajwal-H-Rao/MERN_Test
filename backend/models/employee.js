@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 const employeeSchema = new mongoose.Schema({
     image: {
@@ -52,4 +52,4 @@ const employeeSchema = new mongoose.Schema({
 
 const employeeModel = mongoose.model('Employee',employeeSchema);
 
-export default employeeModel;
+module.exports=employeeModel
