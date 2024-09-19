@@ -7,9 +7,9 @@ const Upload = () => {
     name: "",
     email: "",
     mobile: "",
-    designation: "",
-    gender: "",
-    course: "",
+    designation: "Sales",
+    gender: "M",
+    course: "BCA",
   });
   const [image, setImage] = useState(null);
 

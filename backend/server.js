@@ -18,8 +18,10 @@ app.use(cors());
 app.use(e.json());
 app.use(e.urlencoded({ extended: true }));
 
+app.use(e.static('./public/uploads'))
+
 const storage = multer.diskStorage({
-  destination: "./uploads/",
+  destination: "./public/uploads/",
   filename: (req, file, cb) => {
     const username = req.body.data.name;
     const extname = path.extname(file.originalname);
@@ -81,7 +83,8 @@ app.post("/upload", (req, res) => {
     }
 
     const { name, email, mobile, designation, gender, course } = req.body.data;
-    const imagePath = req.file.path;
+    const imageName = req.file.filename;
+    console.log(req.file)
 
     const check_database = await employeeModel.findOne({
       name: name,
@@ -92,7 +95,7 @@ app.post("/upload", (req, res) => {
       return res.status(500).json({ message: "User already exists" });
 
     const upload_to_database = new employeeModel({
-      image: imagePath,
+      image: imageName,
       name: name,
       email: email,
       mobile: mobile,
@@ -113,9 +116,8 @@ app.post("/upload", (req, res) => {
 
 //get employee list
 app.get("/list",async(req,res)=>{
-  const data = await employeeModel.find();
-  if(data===undefined) res.json({data:[]})
-  else res.json({data:data});
+  const users = await employeeModel.find({});
+  res.json(users);
 })
 
 app.listen(port, () => {
