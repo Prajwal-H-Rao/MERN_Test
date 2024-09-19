@@ -7,6 +7,8 @@ import userModel from "./models/user.js";
 import path from "path";
 import multer from "multer";
 
+import employeeModel from "./models/employee.js";
+
 config();
 const port = process.env.PORT || 5000;
 
@@ -21,7 +23,13 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const username = req.body.data.name;
     const extname = path.extname(file.originalname);
-    cb(null, `${username}-${file.originalname.substring(0,file.originalname.length-extname.length)}${extname}`);
+    cb(
+      null,
+      `${username}-${file.originalname.substring(
+        0,
+        file.originalname.length - extname.length
+      )}${extname}`
+    );
   },
 });
 
@@ -63,7 +71,7 @@ app.post("/login", async (req, res) => {
 //new employee path
 
 app.post("/upload", (req, res) => {
-  upload(req, res, (err) => {
+  upload(req, res, async (err) => {
     if (err) {
       return res.status(400).send(err);
     }
@@ -72,8 +80,31 @@ app.post("/upload", (req, res) => {
       return res.status(400).send("No file uploaded.");
     }
 
-    const {name,email,mobile,designation,gender,course} = req.body.data;
+    const { name, email, mobile, designation, gender, course } = req.body.data;
     const imagePath = req.file.path;
+
+    const check_database = await employeeModel.find({
+      name: name,
+      email: email,
+    });
+
+    if (check_database.length > 0)
+      res.status(500).json({ message: "User already exists" });
+
+    const upload_to_database = new employeeModel({
+      image: imagePath,
+      name: name,
+      email: email,
+      mobile: mobile,
+      gender: gender,
+      course: course,
+      designation: designation,
+    });
+
+    const saved = await upload_to_database.save();
+    if (saved) {
+      res.status(200).json({ message: "uploaded sucessfully" });
+    }
 
     res.send(`File uploaded successfully: ${req.file.path}`);
   });
