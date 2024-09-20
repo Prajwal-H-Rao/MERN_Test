@@ -26,6 +26,24 @@ const Table = () => {
 
   if (isLoading) return <h1>Loading.....</h1>;
 
+  //functions to handle the actions
+  const handleEdit = (item) => {
+    axios.put(`http://localhost:5000/update/${item._id}`,item).then(res=>{
+      setIsLoading(true)
+      setData(res.data.refreshedData)
+      setIsLoading(false)
+    })
+  };
+
+  const handleDelete = (item) => {
+    axios.delete(`http://localhost:5000/employee/${item._id}`).then((res) => {
+      setIsLoading(true);
+      if (res.data.message !== "profile not present")
+        setData(res.data.refreshedData);
+      setIsLoading(false);
+    });
+  };
+
   // Filter data based on search query
   const filteredData = data.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -99,11 +117,19 @@ const Table = () => {
                 />
               </td>
               <td>{item.name}</td>
-              <td>{item.mail}</td>
+              <td>{item.email}</td>
               <td>{item.designation}</td>
               <td>{item.gender}</td>
               <td>{item.course}</td>
               <td>{new Date(item.createdate).toLocaleDateString()}</td>
+              <td>
+                <button type="button" onClick={() => handleEdit(item)}>
+                  Edit
+                </button>
+                <button type="button" onClick={() => handleDelete(item)}>
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
