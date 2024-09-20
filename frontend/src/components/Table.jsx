@@ -26,7 +26,6 @@ const Table = () => {
 
   if (isLoading) return <h1>Loading.....</h1>;
 
-  //functions to handle the actions
   const handleEdit = (item) => {
     axios.put(`http://localhost:5000/update/${item._id}`,item).then(res=>{
       setIsLoading(true)
